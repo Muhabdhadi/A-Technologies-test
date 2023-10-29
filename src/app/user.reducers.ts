@@ -5,15 +5,15 @@ export const initialUserState: User[] = []
 export const userReducers = createReducer(
     initialUserState,
     on(UserActions.deleteUser, (state, { userIndex} ) => {
+        const newState = [...state];
 
-        if (initialUserState.length) {
-         return initialUserState.splice(userIndex);
-        }
+        newState.splice(userIndex, 1);
 
-        return initialUserState;
+        return [...newState];
     }),
 
     on(UserActions.addUser, (state, { name, email, mobile, date}) => {
-        return [ ...initialUserState, {name: name, email: email, mobile: mobile, date: date} ]
+
+        return [ ...state, { name: name, email: email, mobile: mobile, date: date } ]
     })
 )
