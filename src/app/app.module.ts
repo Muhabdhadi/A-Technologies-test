@@ -8,7 +8,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {NgxIntlTelInputModule} from "ngx-intl-tel-input";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {StoreModule} from "@ngrx/store";
-import {userReducers} from "./user.reducers";
+import {userReducers} from "./state/user.reducers";
 
 @NgModule({
   declarations: [

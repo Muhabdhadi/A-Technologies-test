@@ -3,8 +3,8 @@ import {NgbDate, NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, Validators} from "@angular/forms";
 import {CountryISO, SearchCountryField} from "ngx-intl-tel-input";
 import {Store} from "@ngrx/store";
-import {selectUser} from "./user.selector";
-import {addUser, deleteUser} from "./user.actions";
+import {selectUser} from "./state/user.selector";
+import {addUser, deleteUser} from "./state/user.actions";
 
 @Component({
     selector: 'app-root',
