@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
-import {NgbDate, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDate, NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, Validators} from "@angular/forms";
+import {CountryISO, SearchCountryField} from "ngx-intl-tel-input";
+import {User} from "./user.interface";
 
 @Component({
     selector: 'app-root',
@@ -9,24 +11,22 @@ import {FormBuilder, Validators} from "@angular/forms";
 })
 export class AppComponent {
     title = 'technologies';
-    closeResult = '';
     form = this.fb.group({
-        name: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(15)]],
-        email: [null, [Validators.required, Validators.email]],
-        mobile: [null, Validators.required],
-        date: [null, Validators.required]
+        name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(15)]],
+        email: ['', [Validators.required, Validators.email]],
+        mobile: [null, [Validators.required]],
+        date: [{}, Validators.required]
     });
+    protected readonly CountryISO = CountryISO;
+    protected readonly SearchCountryField = SearchCountryField;
     nextDays: {day: number, name: string}[] = [];
-    constructor(private modalService: NgbModal, private fb: FormBuilder) {
-    }
+    users: User[] = []
+    modalRef!: NgbModalRef;
+
+    constructor(private modalService: NgbModal, private fb: FormBuilder) {}
 
     open(content: any): void {
-        this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(
-            (result) => {
-                this.closeResult = `Closed with: ${result}`;
-            },
-            (reason) => {}
-        );
+        this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
     }
 
     isDisabled(date: NgbDate): boolean {
@@ -45,27 +45,49 @@ export class AppComponent {
 
     onSubmit(): void {
         this.validateForms();
-        console.log(this.form.value);
+
+        if (this.form.invalid) { return; }
+
+        const date = this.createDateFromNgbDate(this.form.get('date')?.value);
+        const mobile = this.form.get('mobile')?.value?.['number'];
+
+        this.users.push({
+            mobile: mobile,
+            date: date,
+            email: this.form.get('email')?.value || '',
+            name: this.form.get('name')?.value || ''
+        });
+
+        this.form.reset();
+        this.nextDays = [];
+        this.modalRef.close();
+
     }
 
     test() {
-        console.log(this.form.get('email')?.errors);
+        console.log(this.form.get('mobile')?.errors);
     }
 
     onDateSelected(ngbDate: NgbDate) {
-        const date = new Date(ngbDate.year, ngbDate.month - 1, ngbDate.day);
-        console.log(date);
+        const date = this.createDateFromNgbDate(ngbDate);
+        this.nextDays = [];
 
         for (let i = 0; i < 7; i++) {
             const nextDay = this.getNextDay(date);
             this.nextDays.push({day: nextDay.getDate(), name: nextDay.toLocaleDateString('en-US', { weekday: 'long' })});
         }
-
-        console.log(this.nextDays);
     }
 
     getNextDay(date: Date) {
         const dayAhead = date.setDate(date.getDate() + 1);
         return new Date(dayAhead);
+    }
+
+    createDateFromNgbDate(ngbDate: NgbDate | any) {
+        return new Date(ngbDate.year, ngbDate.month - 1, ngbDate.day)
+    }
+
+    onDeleteUser(index: number) {
+        this.users.splice(index, 1);
     }
 }

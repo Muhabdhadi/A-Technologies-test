@@ -9,26 +9,18 @@
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
                     <th scope="col">Date</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
+                <tr *ngFor="let user of users; let i = index">
+                    <th scope="row">{{user.name}}</th>
+                    <td>{{user.email}}</td>
+                    <td>{{user.mobile}}</td>
+                    <td>{{user.date | date: 'short'}}</td>
+                    <td (click)="onDeleteUser(i)">
+                        <button class="btn btn-danger">Delete</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -64,7 +56,7 @@
                 </div>
 
                 <div class="col-md-12 mb-2">
-                    <label (click)="test()" for="email" class="form-label">Email address</label>
+                    <label for="email" class="form-label">Email address</label>
                     <input type="text"
                            [class.invalid-input]="form.get('email')?.errors?.hasOwnProperty('required') && form.get('email')?.touched || form.get('email')?.errors?.['email']"
                            class="form-control"
@@ -74,12 +66,24 @@
                 </div>
 
                 <div class="col-md-12 mb-2">
-                    <label for="mobileNumber" class="form-label">Mobile Number</label>
-                    <input type="email"
-                           class="form-control"
-                           formControlName="mobile"
-                           id="mobileNumber"
-                           placeholder="0102222221">
+                    <label (click)="test()" for="mobileNumber" class="form-label">Mobile Number</label>
+                    <ngx-intl-tel-input
+                            class="d-block w-100"
+                            [class.invalid-input]="form.get('mobile')?.touched && form.get('mobile')?.errors?.hasOwnProperty('required') ||( form.get('mobile')?.errors?.['validatePhoneNumber'])"
+                            [preferredCountries]="[CountryISO.UnitedStates, CountryISO.UnitedKingdom]"
+                            [enableAutoCountrySelect]="false"
+                            [enablePlaceholder]="true"
+                            [searchCountryFlag]="true"
+                            [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                            [selectFirstCountry]="false"
+                            [selectedCountryISO]="CountryISO.Egypt"
+                            [maxLength]="15"
+                            [phoneValidation]="true"
+                            id="mobileNumber"
+                            name="phone"
+                            formControlName="mobile"
+                    ></ngx-intl-tel-input>
+
                 </div>
 
                 <div class="col-md-12 mb-2">
@@ -123,7 +127,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
+        <button [disabled]="form.invalid" type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
     </div>
 </ng-template>
 
