@@ -15,7 +15,8 @@ export class AppComponent {
         email: [null, [Validators.required, Validators.email]],
         mobile: [null, Validators.required],
         date: [null, Validators.required]
-    })
+    });
+    nextDays: {day: number, name: string}[] = [];
     constructor(private modalService: NgbModal, private fb: FormBuilder) {
     }
 
@@ -49,5 +50,22 @@ export class AppComponent {
 
     test() {
         console.log(this.form.get('email')?.errors);
+    }
+
+    onDateSelected(ngbDate: NgbDate) {
+        const date = new Date(ngbDate.year, ngbDate.month - 1, ngbDate.day);
+        console.log(date);
+
+        for (let i = 0; i < 7; i++) {
+            const nextDay = this.getNextDay(date);
+            this.nextDays.push({day: nextDay.getDate(), name: nextDay.toLocaleDateString('en-US', { weekday: 'long' })});
+        }
+
+        console.log(this.nextDays);
+    }
+
+    getNextDay(date: Date) {
+        const dayAhead = date.setDate(date.getDate() + 1);
+        return new Date(dayAhead);
     }
 }

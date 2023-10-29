@@ -1,3 +1,28 @@
 .invalid-input {
     border: 1px solid red;
 }
+
+.date {
+
+    &-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    background: #1f8ea5d9;
+    width: 60px;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    & p {
+        margin: 0;
+    }
+}

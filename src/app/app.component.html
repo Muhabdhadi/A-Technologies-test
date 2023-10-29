@@ -94,6 +94,7 @@
                                 ngbDatepicker
                                 formControlName="date"
                                 [markDisabled]="isDisabled"
+                                (dateSelect)="onDateSelected($event)"
                                 #dp="ngbDatepicker"
                         />
                         <button class="btn btn-outline-secondary bi bi-calendar3"
@@ -101,6 +102,22 @@
                                 type="button"></button>
                     </div>
 
+                </div>
+
+                <div class="col-md-12 mt-2">
+                    <div class="date-wrapper">
+
+                        <div *ngFor="let d of nextDays" class="date">
+                            <p>
+                                {{d.day}}
+                            </p>
+
+                            <p>
+                                {{d.name}}
+                            </p>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </form>
