@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {NgbDate, NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, Validators} from "@angular/forms";
 import {CountryISO, SearchCountryField} from "ngx-intl-tel-input";
@@ -24,7 +24,9 @@ export class AppComponent {
     users= this.store.select(selectUser);
     modalRef!: NgbModalRef;
 
-    constructor(private modalService: NgbModal, private fb: FormBuilder, private store: Store) {
+    constructor(private modalService: NgbModal,
+                private fb: FormBuilder,
+                private store: Store) {
     }
 
     open(content: any): void {
@@ -46,6 +48,7 @@ export class AppComponent {
     }
 
     onSubmit(): void {
+
         this.validateForms();
 
         if (this.form.invalid) { return; }
