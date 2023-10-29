@@ -1,8 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NgbDate, NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, Validators} from "@angular/forms";
 import {CountryISO, SearchCountryField} from "ngx-intl-tel-input";
-import {User} from "./user.interface";
+import {Store} from "@ngrx/store";
+import {selectUser} from "./user.selector";
+import {addUser, deleteUser} from "./user.actions";
 
 @Component({
     selector: 'app-root',
@@ -15,15 +17,15 @@ export class AppComponent {
         name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(15)]],
         email: ['', [Validators.required, Validators.email]],
         mobile: [null, [Validators.required]],
-        date: [{}, Validators.required]
-    });
-    protected readonly CountryISO = CountryISO;
+        date: [null, Validators.required]
+    });    protected readonly CountryISO = CountryISO;
     protected readonly SearchCountryField = SearchCountryField;
     nextDays: {day: number, name: string}[] = [];
-    users: User[] = []
+    users= this.store.select(selectUser);
     modalRef!: NgbModalRef;
 
-    constructor(private modalService: NgbModal, private fb: FormBuilder) {}
+    constructor(private modalService: NgbModal, private fb: FormBuilder, private store: Store) {
+    }
 
     open(content: any): void {
         this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
@@ -49,14 +51,14 @@ export class AppComponent {
         if (this.form.invalid) { return; }
 
         const date = this.createDateFromNgbDate(this.form.get('date')?.value);
-        const mobile = this.form.get('mobile')?.value?.['number'];
+        const mobile: string = this.form.get('mobile')?.value?.['number'] || '';
 
-        this.users.push({
+        this.store.dispatch(addUser({
             mobile: mobile,
             date: date,
             email: this.form.get('email')?.value || '',
             name: this.form.get('name')?.value || ''
-        });
+        }));
 
         this.form.reset();
         this.nextDays = [];
@@ -84,6 +86,6 @@ export class AppComponent {
     }
 
     onDeleteUser(index: number) {
-        this.users.splice(index, 1);
+        this.store.dispatch(deleteUser( { userIndex: index }));
     }
 }

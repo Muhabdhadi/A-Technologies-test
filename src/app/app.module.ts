@@ -7,6 +7,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgxIntlTelInputModule} from "ngx-intl-tel-input";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {StoreModule} from "@ngrx/store";
+import {userReducers} from "./user.reducers";
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     AppRoutingModule,
     NgbModule,
     ReactiveFormsModule,
-    NgxIntlTelInputModule
+    NgxIntlTelInputModule,
+      StoreModule.forRoot({user: userReducers}),
   ],
   providers: [],
   bootstrap: [AppComponent]
