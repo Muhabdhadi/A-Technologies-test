@@ -64,10 +64,6 @@ export class AppComponent {
 
     }
 
-    test() {
-        console.log(this.form.get('mobile')?.errors);
-    }
-
     onDateSelected(ngbDate: NgbDate) {
         const date = this.createDateFromNgbDate(ngbDate);
         this.nextDays = [];

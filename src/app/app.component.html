@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="col-md-12 mb-2">
-                    <label (click)="test()" for="mobileNumber" class="form-label">Mobile Number</label>
+                    <label for="mobileNumber" class="form-label">Mobile Number</label>
                     <ngx-intl-tel-input
                             class="d-block w-100"
                             [class.invalid-input]="form.get('mobile')?.touched && form.get('mobile')?.errors?.hasOwnProperty('required') ||( form.get('mobile')?.errors?.['validatePhoneNumber'])"
